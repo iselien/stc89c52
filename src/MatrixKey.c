@@ -65,10 +65,37 @@ int matrix_scan(){
 	return key_value;
 }
 
+int matrix_flip_scan(){
+	static int key_value=0;
+	KEY_MATRIX=0x0f;
+	if (KEY_MATRIX!=0x0f){
+		delay_10us(1000);
+		if (KEY_MATRIX!=0x0f){
+			switch (KEY_MATRIX){
+				case 0x07: key_value=1; break;
+				case 0x0b: key_value=2; break;
+				case 0x0d: key_value=3; break;
+				case 0x0e: key_value=4; break;
+			}
+			KEY_MATRIX=0xf0;
+			switch (KEY_MATRIX){
+				case 0x70: key_value=key_value; break;
+				case 0xb0: key_value=key_value+4; break;
+				case 0xd0: key_value=key_value+8; break;
+				case 0xe0: key_value=key_value+12; break;
+			}
+			while (KEY_MATRIX!=0xf0);
+		}
+	}else{
+		key_value=0;
+	}
+	return key_value;
+}
+
 void main() {
 	int key=0;
 	while(1) {
-		key=matrix_scan();
+		key=matrix_flip_scan();
 		if (key!=0) {
 			TEXT=text_code[key];
 		}
