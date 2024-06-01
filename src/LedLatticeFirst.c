@@ -1,3 +1,7 @@
+/*******************
+LED点阵，点亮第一个点
+********************/
+
 #include <8052.h>
 
 #define LED P0
@@ -39,12 +43,14 @@ void hc595_write_code(int code){
 void main() {
 	int i=0;
 
-	LED=0x00;
+	LED=0x7f; //将LED点阵左边第一列设置为0，即LED阴极为低电平，其余列为1，即高电平
 	while(1) {
-		for (i = 0; i < 8; i++){
-			hc595_write_code(0x00);
-			hc595_write_code(hc595_code[i]);
-			delay_ms(500);
-		}
+		hc595_write_code(0x80); //将LED点䧃上边第一行设置为1，即LED阳极为高电平，其余行为0，即低电平
+
+		// for (i = 0; i < 8; i++){
+		// 	hc595_write_code(0x00);
+		// 	hc595_write_code(hc595_code[i]);
+		// 	delay_ms(500);
+		// }
 	}
 }

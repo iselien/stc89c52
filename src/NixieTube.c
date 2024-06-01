@@ -1,3 +1,7 @@
+/*******************
+动态显示数码管
+********************/
+
 #include <8052.h>
 
 #define TEXT P0
@@ -15,7 +19,7 @@ void text_display(){
 	int i=0;
 	for(i=0;i<8;i++){
 		//位选择
-		switch(i){
+		switch(7-i){
 			case 0: LSC=1; LSB=1; LSA=1; break;
 			case 1: LSC=1; LSB=1; LSA=0; break;
 			case 2: LSC=1; LSB=0; LSA=1; break;
@@ -25,17 +29,19 @@ void text_display(){
 			case 6: LSC=0; LSB=0; LSA=1; break;
 			case 7: LSC=0; LSB=0; LSA=0; break;
 		}
-		TEXT=text_code[i];
-		delay_10us(100);
+
+		TEXT=text_code[7-i];
+		delay_10us(200);
 		TEXT=0x00;
 	}
 }
 
-void main() {
+int main() {
 	while(1) {
 		//静态显示单个字符
 		// TEXT=text_code[3];
 		//动态显示多个字符
 		text_display();
 	}
+	return 0;
 }
